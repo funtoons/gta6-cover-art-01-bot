@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vice Sunset Cover Studio — GTA-style cover maker</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="brand-mark">VS</span><div><strong>Vice Sunset Cover Studio</strong><span>Turn your photos into multi-panel poster cover art</span></div></div>
+  <p class="top-note">100% offline &middot; photos never leave your machine &middot; original art only</p>
+</header>
+<main class="app">
+  <section class="controls" aria-label="Cover controls">
+    <div class="group">
+      <h2>1 &middot; Photos</h2>
+      <label class="file-label">Upload photos (1&ndash;4)
+        <input id="upload" type="file" accept="image/*" multiple>
+      </label>
+      <div class="row">
+        <button id="sample-boulevard" type="button" class="chip">Sample: Boulevard</button>
+        <button id="sample-pier" type="button" class="chip">Sample: Pier</button>
+      </div>
+      <p class="hint" id="photo-count">No photos yet &mdash; try a sample below, or upload your own.</p>
+      <div class="thumbs" id="thumbs" aria-label="Loaded photos"></div>
+    </div>
+
+    <div class="group">
+      <h2>2 &middot; Layout</h2>
+      <div class="row wrap" role="group" aria-label="Layout">
+        <button type="button" class="layout-btn" data-layout="hero">Hero</button>
+        <button type="button" class="layout-btn" data-layout="split">Split 2</button>
+        <button type="button" class="layout-btn" data-layout="trio">Trio 3</button>
+        <button type="button" class="layout-btn" data-layout="grid">Grid 4</button>
+      </div>
+      <label>Panel to edit
+        <select id="panel-select">
+          <option value="0">Panel 1</option>
+          <option value="1">Panel 2</option>
+          <option value="2">Panel 3</option>
+          <option value="3">Panel 4</option>
+        </select>
+      </label>
+      <label>Photo in this panel
+        <select id="panel-photo"></select>
+      </label>
+      <label>Zoom <span id="zoom-val">100%</span>
+        <input id="zoom" type="range" min="50" max="300" value="100" step="5">
+      </label>
+      <div class="row">
+        <button id="fit-toggle" type="button" class="chip">Fit: Fill</button>
+        <button id="flip-toggle" type="button" class="chip">Flip: Off</button>
+        <button id="reset-crop" type="button" class="chip">Reset crop</button>
+      </div>
+      <p class="hint">Drag the preview to pan the selected panel. Mouse wheel zooms it too.</p>
+      <label class="check"><input id="tilt" type="checkbox"> Slight panel tilt</label>
+    </div>
+
+    <div class="group">
+      <h2>3 &middot; Caption</h2>
+      <label>Main title
+        <input id="title" type="text" maxlength="32" value="VICE SUNSET">
+      </label>
+      <label>Subtitle / tagline
+        <input id="subtitle" type="text" maxlength="60" value="One city. One last score.">
+      </label>
+      <label>Footer line
+        <input id="footer" type="text" maxlength="60" value="A POSTER MADE WITH VICE SUNSET COVER STUDIO">
+      </label>
+      <label>Title size <span id="title-size-val">92</span>
+        <input id="title-size" type="range" min="48" max="150" value="92" step="2">
+      </label>
+      <div class="row">
+        <button type="button" class="chip pos-btn" data-pos="top">Title: Top</button>
+        <button type="button" class="chip pos-btn" data-pos="bottom">Title: Bottom</button>
+      </div>
+      <div class="row wrap" role="group" aria-label="Title colour">
+        <button type="button" class="swatch" data-color="white" style="--c:#ffffff" aria-label="White">White</button>
+        <button type="button" class="swatch" data-color="sunset" style="--c:#ffd23f" aria-label="Sunset yellow">Sunset</button>
+        <button type="button" class="swatch" data-color="neon" style="--c:#ff2e88" aria-label="Neon pink">Neon</button>
+        <button type="button" class="swatch" data-color="cyan" style="--c:#2ee6ff" aria-label="Cyan">Cyan</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2>4 &middot; Grade &amp; decor</h2>
+      <div class="row wrap" role="group" aria-label="Colour grade">
+        <button type="button" class="grade-btn" data-grade="sunset">Sunset</button>
+        <button type="button" class="grade-btn" data-grade="neon">Neon Night</button>
+        <button type="button" class="grade-btn" data-grade="golden">Golden Hour</button>
+        <button type="button" class="grade-btn" data-grade="mono">Mono Noir</button>
+      </div>
+      <label class="check"><input id="decor-sun" type="checkbox" checked> Sunburst behind title</label>
+      <label class="check"><input id="decor-palms" type="checkbox" checked> Palm silhouettes</label>
+      <label class="check"><input id="decor-skyline" type="checkbox" checked> Skyline silhouette</label>
+    </div>
+
+    <div class="group">
+      <h2>5 &middot; Export PNG</h2>
+      <div class="row wrap">
+        <button id="export-square" type="button" class="export-btn">1080 &times; 1080</button>
+        <button id="export-tall" type="button" class="export-btn">1080 &times; 1350</button>
+        <button id="export-wide" type="button" class="export-btn">1920 &times; 1080</button>
+      </div>
+      <p id="status" role="status">Ready. Load a photo to begin.</p>
+    </div>
+  </section>
+  <section class="stage" aria-label="Live preview">
+    <div class="stage-head"><span>Live preview</span><span id="preview-size">1080 &times; 1080</span></div>
+    <canvas id="cover" width="1080" height="1080" aria-label="Cover preview — drag to pan the selected panel"></canvas>
+    <p class="hint">Drag on the cover to pan &middot; wheel to zoom &middot; every change previews live.</p>
+  </section>
+</main>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
