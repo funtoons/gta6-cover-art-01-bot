@@ -201,15 +201,24 @@ window.__viceStudio = { state, exportPng, renderPreview, panelCountFor };
 const params = new URLSearchParams(location.search);
 const shot = params.get('shot');
 if (shot) {
-  runShot(shot, params, async ({ photo, caption, layout, grade }) => {
-    const img = await loadImageUrl(`./samples/${photo}.jpg`);
-    addPhoto(state, img, photo === 'boulevard' ? 'Boulevard sample' : 'Pier sample');
+  runShot(shot, params, async ({ photo, photos, panels, pans, caption, layout, grade }) => {
+    const names = photos && photos.length ? photos : [photo];
+    for (const name of names) {
+      const img = await loadImageUrl(`./samples/${name}.jpg`);
+      addPhoto(state, img, name === 'boulevard' ? 'Boulevard sample' : 'Pier sample');
+    }
     state.title = caption;
     const titleEl = $('title'); if (titleEl) titleEl.value = caption;
     setLayout(state, layout);
     state.grade = grade;
-    // In trio, give the hero the sample and reuse it in the small panels too.
-    state.panels.forEach((p) => { p.photoIndex = 0; });
+    // Panels take their photo from ?panels= (index into the loaded photos)
+    // and their vertical pan from ?pans=; both default to the first photo,
+    // unpanned, so a single-photo shot behaves exactly as before.
+    state.panels.forEach((p, i) => {
+      p.photoIndex = panels && panels[i] !== undefined
+        ? Math.max(0, Math.min(panels[i], state.photos.length - 1)) : 0;
+      if (pans && pans[i] !== undefined) p.panY = pans[i];
+    });
     // Cover shots paint at the viewport's own aspect ratio (see shots.js).
     if (shot === 'cover') { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
     refreshAll();
